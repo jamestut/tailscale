@@ -1,0 +1,7 @@
+upstream:
+  remote: upstream
+  branch: main
+fork:
+  remote: origin
+integration:
+  branch: main
