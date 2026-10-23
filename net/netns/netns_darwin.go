@@ -12,6 +12,7 @@ import (
 	"net"
 	"net/netip"
 	"os"
+	"runtime"
 	"strings"
 	"syscall"
 
@@ -37,7 +38,7 @@ var errInterfaceStateInvalid = errors.New("interface state invalid")
 // controlLogf binds c to a particular interface as necessary to dial the
 // provided (network, address).
 func controlLogf(logf logger.Logf, netMon *netmon.Monitor, network, address string, c syscall.RawConn) error {
-	if disableBindConnToInterface.Load() || (version.IsMacGUIVariant() && disableBindConnToInterfaceAppleExt.Load()) {
+	if (runtime.GOOS == "darwin" && bindToInterfaceByRouteEnv()) || disableBindConnToInterface.Load() || (version.IsMacGUIVariant() && disableBindConnToInterfaceAppleExt.Load()) {
 		return nil
 	}
 
